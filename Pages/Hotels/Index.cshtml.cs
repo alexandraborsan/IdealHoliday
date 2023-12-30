@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using IdealHoliday.Data;
 using IdealHoliday.Models;
+using IdealHoliday.Models.ViewModels;
 
 namespace IdealHoliday.Pages.Hotels
 {
@@ -19,14 +20,28 @@ namespace IdealHoliday.Pages.Hotels
             _context = context;
         }
 
-        public IList<Hotel> Hotel { get;set; } = default!;
+        public IList<Hotel> Hotel { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public HotelIndexData HotelData { get; set; }
+        public int HotelId { get; set; }
+        public int HolidayId { get; set; }
+        public async Task OnGetAsync(int? Id, int? holidayId)
         {
-            if (_context.Hotel != null)
+            HotelData = new HotelIndexData();
+            HotelData.Hotels = await _context.Hotel
+            .Include(i => i.Holidays)
+            .OrderBy(i => i.HotelName)
+            .ToListAsync();
+            if (Id != null)
             {
-                Hotel = await _context.Hotel.ToListAsync();
+                HotelId = Id.Value;
+                Hotel hotel = HotelData.Hotels
+                .Where(i => i.Id == Id.Value).Single();
+                HotelData.Holidays = hotel.Holidays;
             }
         }
     }
+
+
+
 }

@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id:int?}"
 @model IdealHoliday.Pages.Hotels.IndexModel
 
 @{
@@ -23,20 +23,55 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Hotel) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.HotelName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfStars)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.HotelData.Hotels)
+        {
+            string selectedRow = "";
+            if (item.Id == Model.HotelId)
+            {
+                selectedRow = "table-success";
+            }
+
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.HotelName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfStars)
+                </td>
+                <td>
+                    <a asp-page="./Index" asp-route-id="@item.Id">Select</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+@if (Model.HotelData.Holidays!= null)
+{
+    <h3>Holidays Edited by Selected Hotel</h3>
+    <table class="table">
+
+        @foreach (var item in Model.HotelData.Hotels)
+        {
+            string selectedRow = "";
+            if (item.Id == Model.HotelId)
+            {
+                selectedRow = "table-success";
+            }
+            <tr class="@selectedRow">
+
+                <td>
+                    @{
+                        foreach (var b in item.Holidays)
+                        {
+                            @b.Destination
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+

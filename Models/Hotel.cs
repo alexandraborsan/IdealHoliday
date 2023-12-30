@@ -9,6 +9,8 @@ namespace IdealHoliday.Models
         public string? HotelName { get; set; }
         [Display(Name = "Number of Stars")]
         public int NumberOfStars { get; set; }
-       
+        public ICollection<Holiday>? Holidays { get; set; }
+
+
     }
 }

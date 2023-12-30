@@ -49,8 +49,7 @@ namespace IdealHoliday.Pages.Holidays
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? Id, string[]
-selectedCategories)
+        public async Task<IActionResult> OnPostAsync(int? Id, string[] selectedCategories)
         {
             if (Id == null)
             {

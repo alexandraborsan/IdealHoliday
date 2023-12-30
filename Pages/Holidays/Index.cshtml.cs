@@ -24,8 +24,19 @@ namespace IdealHoliday.Pages.Holidays
         public HolidayData HolidayD { get; set; }
         public int HolidayId { get; set; }
         public int CategoryId { get; set; }
-        public async Task OnGetAsync(int? Id, int? categoryId)
+        public string DestinationSort { get; set; }
+        public string BeginDateSort { get; set; }
+        public string CurrentFilter { get; set; }
+        public DateTime? CurrentDateFilter { get; set; }
+        public async Task OnGetAsync(int? Id, int? categoryId, string sortOrder, string
+searchString, DateTime searchDate)
+
         {
+            DestinationSort = String.IsNullOrEmpty(sortOrder) ? "destination_desc" : "destination";
+            BeginDateSort = String.IsNullOrEmpty(sortOrder) ? "beginDate_desc" : "beginDate";
+            CurrentFilter = searchString;
+            CurrentDateFilter = searchDate;
+
             HolidayD = new HolidayData();
 
             HolidayD.Holidays = await _context.Holiday
@@ -35,12 +46,40 @@ namespace IdealHoliday.Pages.Holidays
             .AsNoTracking()
             .OrderBy(b => b.BeginDate)
             .ToListAsync();
-            if (Id != null)
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                HolidayD.Holidays = HolidayD.Holidays.Where(s => s.Destination.Contains(searchString)).ToList();
+            }
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                HolidayD.Holidays = HolidayD.Holidays.Where(s => s.BeginDate.Date == searchDate.Date).ToList();
+            }
+
+                if (Id != null)
             {
                 HolidayId = Id.Value;
                 Holiday holiday = HolidayD.Holidays
                 .Where(i => i.Id == Id.Value).Single();
                 HolidayD.Categories = holiday.HolidayCategories.Select(s => s.Category);
+            }
+            switch (sortOrder)
+            {
+                case "destination_desc":
+                    HolidayD.Holidays = HolidayD.Holidays.OrderByDescending(s =>
+                   s.Destination);
+                    break;
+                case "beginDate_desc":
+                    HolidayD.Holidays = HolidayD.Holidays.OrderByDescending(s => s.BeginDate);
+                    break;
+                case "destination":
+                    HolidayD.Holidays = HolidayD.Holidays.OrderBy(s => s.Destination);
+                    break;
+                case "beginDate":
+                    HolidayD.Holidays = HolidayD.Holidays.OrderBy(s => s.BeginDate);
+                    break;
+
             }
         }
     }
