@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/"
 @model IdealHoliday.Pages.Holidays.IndexModel
 
 @{
@@ -10,6 +10,7 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -34,39 +35,56 @@
             <th>
                 @Html.DisplayNameFor(model => model.Holiday[0].Price)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Holiday[0].HolidayCategories)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Holiday) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Destination)
-            </td>
+        @foreach (var item in Model.HolidayD.Holidays)
+        {
+            string selectedRow = "";
+            if (item.Id == Model.HolidayId)
+            {
+                selectedRow = "table-success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Destination)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Hotel.HotelName)
                 </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BeginDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfAdults)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfKids)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+                <td>
+                    @Html.DisplayFor(modelItem => item.BeginDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfAdults)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfKids)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @{
+                        foreach (var category in item.HolidayCategories)
+                        {
+                            @category.Category.Id @: @category.Category.CategoryName <br />
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

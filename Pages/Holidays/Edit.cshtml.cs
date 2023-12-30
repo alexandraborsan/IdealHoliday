@@ -12,7 +12,7 @@ using System.Security.Policy;
 
 namespace IdealHoliday.Pages.Holidays
 {
-    public class EditModel : PageModel
+    public class EditModel : HolidayCategoriesPageModel
     {
         private readonly IdealHoliday.Data.IdealHolidayContext _context;
 
@@ -24,57 +24,63 @@ namespace IdealHoliday.Pages.Holidays
         [BindProperty]
         public Holiday Holiday { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? Id)
         {
-            if (id == null || _context.Holiday == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var holiday =  await _context.Holiday.FirstOrDefaultAsync(m => m.Id == id);
-            if (holiday == null)
+            Holiday =  await _context.Holiday
+                .Include(b => b.Hotel)
+                .Include(b => b.HolidayCategories).ThenInclude(b => b.Category)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == Id);
+
+            if (Holiday == null)
             {
                 return NotFound();
             }
-            Holiday = holiday;
+
+            PopulateAssignedCategoryData(_context, Holiday); 
+            Holiday = Holiday;
             ViewData["HotelId"] = new SelectList(_context.Set<Hotel>(), "Id",
 "HotelName");
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? Id, string[]
+selectedCategories)
         {
-            if (!ModelState.IsValid)
+            if (Id == null)
             {
-                return Page();
+                return NotFound();
             }
-
-            _context.Attach(Holiday).State = EntityState.Modified;
-
-            try
+           
+            var holidayToUpdate = await _context.Holiday
+            .Include(i => i.Hotel)
+            .Include(i => i.HolidayCategories)
+            .ThenInclude(i => i.Category)
+            .FirstOrDefaultAsync(s => s.Id == Id);
+            if (holidayToUpdate == null)
             {
+                return NotFound();
+            }
+           
+            if (await TryUpdateModelAsync<Holiday>(
+            holidayToUpdate,
+            "Holiday",
+            i => i.Destination, i => i.BeginDate,
+            i => i.EndDate, i => i.NumberOfAdults, i => i.NumberOfKids,
+            i => i.Price, i => i.HotelId))
+            {
+                UpdateHolidayCategories(_context, selectedCategories, holidayToUpdate);
                 await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HolidayExists(Holiday.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool HolidayExists(int id)
-        {
-          return (_context.Holiday?.Any(e => e.Id == id)).GetValueOrDefault();
+            UpdateHolidayCategories(_context, selectedCategories, holidayToUpdate);
+            PopulateAssignedCategoryData(_context, holidayToUpdate);
+            return Page();
         }
     }
 }

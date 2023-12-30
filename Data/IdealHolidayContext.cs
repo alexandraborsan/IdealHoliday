@@ -17,5 +17,7 @@ namespace IdealHoliday.Data
         public DbSet<IdealHoliday.Models.Holiday> Holiday { get; set; } = default!;
 
         public DbSet<IdealHoliday.Models.Hotel>? Hotel { get; set; }
+
+        public DbSet<IdealHoliday.Models.Category>? Category { get; set; }
     }
 }

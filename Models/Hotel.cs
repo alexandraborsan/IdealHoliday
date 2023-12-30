@@ -6,7 +6,7 @@ namespace IdealHoliday.Models
     {
         public int Id { get; set; }
         [Display(Name = "Hotel")]
-        public string HotelName { get; set; }
+        public string? HotelName { get; set; }
         [Display(Name = "Number of Stars")]
         public int NumberOfStars { get; set; }
        

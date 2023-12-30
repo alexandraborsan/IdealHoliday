@@ -19,14 +19,28 @@ namespace IdealHoliday.Pages.Holidays
             _context = context;
         }
 
-        public IList<Holiday> Holiday { get;set; } = default!;
+        public IList<Holiday> Holiday { get; set; }
 
-        public async Task OnGetAsync()
+        public HolidayData HolidayD { get; set; }
+        public int HolidayId { get; set; }
+        public int CategoryId { get; set; }
+        public async Task OnGetAsync(int? Id, int? categoryId)
         {
+            HolidayD = new HolidayData();
+
+            HolidayD.Holidays = await _context.Holiday
+            .Include(b => b.Hotel)
+            .Include(b => b.HolidayCategories)
+            .ThenInclude(b => b.Category)
+            .AsNoTracking()
+            .OrderBy(b => b.BeginDate)
+            .ToListAsync();
+            if (Id != null)
             {
-                Holiday = await _context.Holiday
-                .Include(b => b.Hotel)
-                .ToListAsync();
+                HolidayId = Id.Value;
+                Holiday holiday = HolidayD.Holidays
+                .Where(i => i.Id == Id.Value).Single();
+                HolidayD.Categories = holiday.HolidayCategories.Select(s => s.Category);
             }
         }
     }
