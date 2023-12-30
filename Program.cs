@@ -1,7 +1,12 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using IdealHoliday.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddDbContext<IdealHolidayContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IdealHolidayContext") ?? throw new InvalidOperationException("Connection string 'IdealHolidayContext' not found.")));
 
 var app = builder.Build();
 
