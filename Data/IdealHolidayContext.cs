@@ -19,5 +19,14 @@ namespace IdealHoliday.Data
         public DbSet<IdealHoliday.Models.Hotel>? Hotel { get; set; }
 
         public DbSet<IdealHoliday.Models.Category>? Category { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Holiday>()
+                .HasOne(h => h.Booking)
+                .WithOne(b => b.Holiday)
+                .HasForeignKey<Booking>(b => b.HolidayId);
+        }
+        public DbSet<IdealHoliday.Models.Customer>? Customer { get; set; }
+        public DbSet<IdealHoliday.Models.Booking>? Booking { get; set; }
     }
 }

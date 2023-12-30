@@ -32,12 +32,14 @@ namespace IdealHoliday.Pages.Holidays
 searchString, DateTime searchDate)
 
         {
+            HolidayD = new HolidayData();
+
             DestinationSort = String.IsNullOrEmpty(sortOrder) ? "destination_desc" : "destination";
             BeginDateSort = String.IsNullOrEmpty(sortOrder) ? "beginDate_desc" : "beginDate";
+
             CurrentFilter = searchString;
             CurrentDateFilter = searchDate;
 
-            HolidayD = new HolidayData();
 
             HolidayD.Holidays = await _context.Holiday
             .Include(b => b.Hotel)
@@ -78,6 +80,9 @@ searchString, DateTime searchDate)
                     break;
                 case "beginDate":
                     HolidayD.Holidays = HolidayD.Holidays.OrderBy(s => s.BeginDate);
+                    break;
+                default:
+                    HolidayD.Holidays = HolidayD.Holidays.OrderBy(s => s.Destination);
                     break;
 
             }

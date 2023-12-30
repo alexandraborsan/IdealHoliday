@@ -1,0 +1,49 @@
+﻿@page
+@model IdealHoliday.Pages.Bookings.IndexModel
+
+@{
+    ViewData["Title"] = "✈️Bookings";
+}
+
+<h1>✈️Bookings</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].Holiday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Booking[0].ReservationDate)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Booking) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Holiday.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationDate)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

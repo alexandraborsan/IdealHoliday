@@ -22,6 +22,34 @@ namespace IdealHoliday.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("IdealHoliday.Models.Booking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HolidayId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReservationDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("HolidayId")
+                        .IsUnique()
+                        .HasFilter("[HolidayId] IS NOT NULL");
+
+                    b.ToTable("Booking");
+                });
+
             modelBuilder.Entity("IdealHoliday.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -38,6 +66,35 @@ namespace IdealHoliday.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("IdealHoliday.Models.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customer");
+                });
+
             modelBuilder.Entity("IdealHoliday.Models.Holiday", b =>
                 {
                     b.Property<int>("Id")
@@ -48,6 +105,12 @@ namespace IdealHoliday.Migrations
 
                     b.Property<DateTime>("BeginDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Destination")
                         .HasColumnType("nvarchar(max)");
@@ -68,6 +131,8 @@ namespace IdealHoliday.Migrations
                         .HasColumnType("decimal(6,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("HotelId");
 
@@ -116,11 +181,32 @@ namespace IdealHoliday.Migrations
                     b.ToTable("Hotel");
                 });
 
+            modelBuilder.Entity("IdealHoliday.Models.Booking", b =>
+                {
+                    b.HasOne("IdealHoliday.Models.Customer", "Customer")
+                        .WithMany("Bookings")
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("IdealHoliday.Models.Holiday", "Holiday")
+                        .WithOne("Booking")
+                        .HasForeignKey("IdealHoliday.Models.Booking", "HolidayId");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Holiday");
+                });
+
             modelBuilder.Entity("IdealHoliday.Models.Holiday", b =>
                 {
+                    b.HasOne("IdealHoliday.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
                     b.HasOne("IdealHoliday.Models.Hotel", "Hotel")
                         .WithMany("Holidays")
                         .HasForeignKey("HotelId");
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Hotel");
                 });
@@ -149,8 +235,15 @@ namespace IdealHoliday.Migrations
                     b.Navigation("HolidayCategories");
                 });
 
+            modelBuilder.Entity("IdealHoliday.Models.Customer", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
             modelBuilder.Entity("IdealHoliday.Models.Holiday", b =>
                 {
+                    b.Navigation("Booking");
+
                     b.Navigation("HolidayCategories");
                 });
 

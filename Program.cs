@@ -1,12 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using IdealHoliday.Data;
+using Microsoft.AspNetCore.Identity;
+using IdealHoliday;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<IdealHolidayContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IdealHolidayContext") ?? throw new InvalidOperationException("Connection string 'IdealHolidayContext' not found.")));
+
+builder.Services.AddDbContext<AgencyIdentityContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IdealHolidayContext") ?? throw new InvalidOperationException("Connection string 'IdealHolidayContext' not found."))
+);
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+    options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<AgencyIdentityContext>();
 
 var app = builder.Build();
 
@@ -22,6 +32,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
