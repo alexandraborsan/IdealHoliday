@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using IdealHoliday.Data;
 using IdealHoliday.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IdealHoliday.Pages.Bookings
-{
+{ 
+
     public class CreateModel : PageModel
     {
         private readonly IdealHoliday.Data.IdealHolidayContext _context;

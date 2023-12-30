@@ -4,18 +4,35 @@ using IdealHoliday.Data;
 using Microsoft.AspNetCore.Identity;
 using IdealHoliday;
 var builder = WebApplication.CreateBuilder(args);
+ 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy =>
+   policy.RequireRole("Admin"));
+});
+
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeFolder("/Holidays");
+    options.Conventions.AllowAnonymousToPage("/Holidays/Index");
+    options.Conventions.AllowAnonymousToPage("/Holidays/Details");
+    options.Conventions.AuthorizeFolder("/Customers", "AdminPolicy");
+
+
+
+});
+
 builder.Services.AddDbContext<IdealHolidayContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IdealHolidayContext") ?? throw new InvalidOperationException("Connection string 'IdealHolidayContext' not found.")));
 
 builder.Services.AddDbContext<AgencyIdentityContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("IdealHolidayContext") ?? throw new InvalidOperationException("Connection string 'IdealHolidayContext' not found."))
-);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IdealHolidayContext") ?? throw new InvalidOperationException("Connection string 'IdealHolidayContext' not found.")));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AgencyIdentityContext>();
 
 var app = builder.Build();
