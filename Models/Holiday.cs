@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Policy;
 
@@ -30,6 +31,7 @@ namespace IdealHoliday.Models
     
         public int? CustomerId { get; set; }
         public Customer? Customer { get; set; }
+        [DisplayName("Holiday Categories")]
         public ICollection<HolidayCategory>? HolidayCategories { get; set; }
     }
 

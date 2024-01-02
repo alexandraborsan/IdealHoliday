@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using IdealHoliday.Data;
 using IdealHoliday.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IdealHoliday.Pages.Hotels
 {
+    [Authorize(Roles = "Admin")]
     public class DeleteModel : PageModel
     {
         private readonly IdealHoliday.Data.IdealHolidayContext _context;

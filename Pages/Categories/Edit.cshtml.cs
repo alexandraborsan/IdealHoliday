@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IdealHoliday.Data;
 using IdealHoliday.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IdealHoliday.Pages.Categories
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
         private readonly IdealHoliday.Data.IdealHolidayContext _context;

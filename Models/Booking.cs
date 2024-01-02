@@ -11,6 +11,6 @@ namespace IdealHoliday.Models
         public Holiday? Holiday { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Reservation Date")]
-        public DateTime ReservationDate { get; set; }
+        public DateTime? ReservationDate { get; set; }
     }
 }
