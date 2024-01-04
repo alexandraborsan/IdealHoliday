@@ -26,8 +26,8 @@ namespace IdealHoliday.Pages.Bookings
             if (_context.Booking != null)
             {
                 Booking = await _context.Booking
-                .Include(b => b.Customer)
-                .Include(b => b.Holiday).ToListAsync();
+                .Include(b => b.Holiday)
+                .Include(b => b.Customer).ToListAsync();
             }
         }
     }

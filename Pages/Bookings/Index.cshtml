@@ -17,7 +17,7 @@
                 @Html.DisplayNameFor(model => model.Booking[0].Customer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Booking[0].Holiday)
+                @Html.DisplayNameFor(model =>model.Booking[0].Holiday.Destination)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Booking[0].ReservationDate)
@@ -30,10 +30,10 @@
 @foreach (var item in Model.Booking) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.Id)
+                @Html.DisplayFor(modelItem => item.Customer.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Holiday.Id)
+                @Html.DisplayFor(modelItem => item.Holiday.Destination)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReservationDate)

@@ -31,7 +31,10 @@ namespace IdealHoliday.Pages.Bookings
                 return NotFound();
             }
 
-            var booking = await _context.Booking.FirstOrDefaultAsync(m => m.Id == id);
+            var booking = await _context.Booking
+                .Include(m => m.Customer)
+                .Include(m => m.Holiday)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (booking == null)
             {

@@ -32,13 +32,14 @@ namespace IdealHoliday.Pages.Bookings
                 return NotFound();
             }
 
+
             var booking =  await _context.Booking.FirstOrDefaultAsync(m => m.Id == id);
             if (booking == null)
             {
                 return NotFound();
             }
             Booking = booking;
-           ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Id");
+           ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "FullName");
            ViewData["HolidayId"] = new SelectList(_context.Holiday, "Id", "Id");
             return Page();
         }

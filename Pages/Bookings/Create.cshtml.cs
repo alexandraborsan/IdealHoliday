@@ -24,17 +24,9 @@ namespace IdealHoliday.Pages.Bookings
 
         public IActionResult OnGet()
         {
-            var holidayList = _context.Holiday
-                .Include(h => h.Customer)
-                .Select(x => new
-                {
-                    x.Id,
-                    HolidayFullName = x.Destination + x.Customer.LastName + " " +
-                                      x.Customer.FirstName
-                });
 
-            ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "HolidayFullName");
-            ViewData["HolidayId"] = new SelectList(holidayList, "Id", "HolidayFullName");
+            ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "FullName");
+            ViewData["HolidayId"] = new SelectList(_context.Holiday, "Id", "Destination");
 
             return Page();
         }
