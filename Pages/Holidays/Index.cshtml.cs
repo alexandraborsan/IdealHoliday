@@ -26,7 +26,7 @@ namespace IdealHoliday.Pages.Holidays
         public int CategoryId { get; set; }
         public string DestinationSort { get; set; }
         public string BeginDateSort { get; set; }
-        public string CurrentFilter { get; set; }
+        public string? CurrentFilter { get; set; }
         public DateTime? CurrentDateFilter { get; set; }
         public async Task OnGetAsync(int? Id, int? categoryId, string sortOrder, string
 searchString, DateTime searchDate)
@@ -51,15 +51,15 @@ searchString, DateTime searchDate)
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                HolidayD.Holidays = HolidayD.Holidays.Where(s => s.Destination.Contains(searchString)).ToList();
+                HolidayD.Holidays = HolidayD.Holidays.Where(s => s.Destination.Contains(searchString));
             }
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (searchDate != default)
             {
-                HolidayD.Holidays = HolidayD.Holidays.Where(s => s.BeginDate.Date == searchDate.Date).ToList();
+                HolidayD.Holidays = HolidayD.Holidays.Where(s => s.BeginDate.Date == searchDate.Date);
             }
 
-                if (Id != null)
+            if (Id != null)
             {
                 HolidayId = Id.Value;
                 Holiday holiday = HolidayD.Holidays
