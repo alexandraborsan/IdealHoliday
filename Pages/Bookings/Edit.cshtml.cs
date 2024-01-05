@@ -11,9 +11,11 @@ using IdealHoliday.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace IdealHoliday.Pages.Bookings
+
 {
-   
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
+
     {
         private readonly IdealHoliday.Data.IdealHolidayContext _context;
 
@@ -40,7 +42,7 @@ namespace IdealHoliday.Pages.Bookings
             }
             Booking = booking;
            ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "FullName");
-           ViewData["HolidayId"] = new SelectList(_context.Holiday, "Id", "Id");
+           ViewData["HolidayId"] = new SelectList(_context.Holiday, "Id", "Destination");
             return Page();
         }
 

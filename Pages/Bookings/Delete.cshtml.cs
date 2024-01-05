@@ -11,7 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace IdealHoliday.Pages.Bookings
 {
-  
+    [Authorize(Roles = "Admin")]
+
     public class DeleteModel : PageModel
     {
         private readonly IdealHoliday.Data.IdealHolidayContext _context;

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
 namespace IdealHoliday.Pages.Bookings
-{ 
+{
 
     public class CreateModel : PageModel
     {
