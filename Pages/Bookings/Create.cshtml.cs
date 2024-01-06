@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace IdealHoliday.Pages.Bookings
 {
+    [Authorize(Roles = "Admin")]
 
     public class CreateModel : PageModel
     {
